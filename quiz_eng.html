@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quix-english</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: black;
+        }
+
+        .app {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 100px auto 0;
+            border-radius: 10px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+
+
+        }
+
+        .app h1 {
+            font-size: 25px;
+            color: black;
+            font-weight: 600;
+            border-bottom: 1px solid #333;
+            padding-bottom: 30px;
+        }
+
+        .quiz {
+            padding: 20px 0;
+        }
+
+        .quiz h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: black;
+        }
+
+        .btn {
+            background: white;
+            color: #222;
+            font-weight: 500;
+            width: 100%;
+            border: 1px solid #222;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: left;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover:not([disabled]) {
+            background: #222;
+            color: #fff;
+
+        }
+
+        .btn:disabled {
+            cursor: no-drop;
+        }
+
+        #next-btn {
+            background: #001e4d;
+            color: white;
+            font-weight: 500;
+            width: 150px;
+            border: 0;
+            padding: 10px;
+            margin: 20px auto 0;
+            border-radius: 4px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #next-btn:hover {
+            background: #000f28;
+        }
+
+        .correct {
+            background: #6ff6a8;
+        }
+
+        .incorrect {
+            background: #f86b6b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <h1>Simple quiz</h1>
+        <div class="quiz">
+            <h2 id="question"> question goes here</h2>
+            <div class="answer-buttons">
+                <!-- Answer buttons will be added dynamically using JavaScript -->
+                <div class="answer-buttons">
+                    <button class="btn">Answer 1</button>
+                    <button class="btn">Answer 2</button>
+                    <button class="btn">Answer 3</button>
+                    <button class="btn">Answer 4</button>
+                </div>
+            </div>
+            <button id="next-btn" onclick="showNextQuestion()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // ... (unchanged questions)
+            {
+                question: "Choose the correct form of the verb- She ___ to the store every day.",
+                answers: [
+                    { text: "go", correct: false },
+                    { text: "goes", correct: true },
+                    { text: "going", correct: false },
+                    { text: "went", correct: false },
+                ]
+            },
+            {
+                question: "What is the opposite of - big",
+                answers: [
+                    { text: "Small", correct: true },
+                    { text: "Tall", correct: false },
+                    { text: "Wide", correct: false },
+                    { text: "Long", correct: false },
+                ]
+            },
+            {
+                question: "Complete the sentence: I ___ a book yesterday.",
+                answers: [
+                    { text: "read", correct: true },
+                    { text: "reads", correct: false },
+                    { text: "reading", correct: false },
+                    { text: " will read", correct: false },
+                ]
+            },
+            {
+                question: "Which of the following is a pronoun?",
+                answers: [
+                    { text: "Jump", correct: false },
+                    { text: "he", correct: true },
+                    { text: "run", correct: false },
+                    { text: "fast", correct: false },
+                ]
+            },
+            {
+                question: "What is the plural form of child?",
+                answers: [
+                    { text: "Childs", correct: false },
+                    { text: "Children", correct: true },
+                    { text: "Childrens", correct: false },
+                    { text: "Childes", correct: false },
+                ]
+            },
+            {
+                question: "What is the past tense of eat?",
+                answers: [
+                    { text: "Eating", correct: false },
+                    { text: "Eaten", correct: false },
+                    { text: "Ate", correct: true },
+                    { text: "Eat", correct: false },
+                ]
+            },
+            {
+                question: "Identify the antonym of fast.",
+                answers: [
+                    { text: "Slow", correct: true },
+                    { text: "Quick", correct: false },
+                    { text: "Rapid", correct: false },
+                    { text: "Swift", correct: false },
+                ]
+            },
+            {
+                question: "What is the plural of man?",
+                answers: [
+                    { text: "Mens", correct: false },
+                    { text: "Men", correct: true },
+                    { text: "Mans", correct: false },
+                    { text: "None Of The Above", correct: false },
+                ]
+            },
+            {
+                question: "What do you call a group of cows?",
+                answers: [
+                    { text: "Flock", correct: false },
+                    { text: "Herd", correct: true },
+                    { text: "Pack", correct: false },
+                    { text: "None Of The Above", correct: false },
+                ]
+            },
+            {
+                question: "What is the present continuous form of the verb write?",
+                answers: [
+                    { text: "writting", correct: true },
+                    { text: "writes", correct: false },
+                    { text: "wrote", correct: false },
+                    { text: "written", correct: false },
+                ]
+            }
+        ];
+
+        const questionElement = document.getElementById("question");
+        const answerButtons = document.querySelector(".answer-buttons");
+        const nextButton = document.getElementById("next-btn");
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            nextButton.innerHTML = "Next";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            resetState();
+            let currentQuestion = questions[currentQuestionIndex];
+            let questionNo = currentQuestionIndex + 1;
+            questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
+
+            currentQuestion.answers.forEach(answer => {
+                const button = document.createElement("button");
+                button.innerHTML = answer.text;
+                button.classList.add("btn");
+                answerButtons.appendChild(button);
+                if (answer.correct) {
+                    button.dataset.correct = answer.correct;
+                }
+                button.addEventListener("click", selectAnswer);
+            });
+        }
+
+        function resetState() {
+            nextButton.style.display = "none";
+            while (answerButtons.firstChild) {
+                answerButtons.removeChild(answerButtons.firstChild);
+            }
+        }
+
+        function selectAnswer(e) {
+            const selectedBtn = e.target;
+            const isCorrect = selectedBtn.dataset.correct === "true";
+            if (isCorrect) {
+                selectedBtn.classList.add("correct");
+                score++;
+            } else {
+                selectedBtn.classList.add("incorrect");
+            }
+            Array.from(answerButtons.children).forEach(button => {
+                if (button.dataset.correct == "true") {
+                    button.classList.add("correct");
+                }
+                button.disabled = true;
+            });
+            showNextButton();
+        }
+
+        function showNextButton() {
+            nextButton.style.display = "block";
+        }
+
+        function showNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            questionElement.innerHTML = `You scored ${score} out of ${questions.length} questions.`;
+            answerButtons.innerHTML = "";
+            nextButton.style.display = "none";
+        }
+
+        startQuiz();
+    </script>
+</body>
+
+</html>

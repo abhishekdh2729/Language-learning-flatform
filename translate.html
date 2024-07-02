@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* Your CSS styles remain unchanged */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'roboto', sans-serif;
+          }
+          
+          body {
+            height: 100vh;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          
+          .container {
+            width: 900px;
+            background: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, .3);
+            border-radius: 5px;
+            overflow: hidden;
+          }
+          
+          .translator_property {
+            border: 1 px solid #c7c7c783;
+          }
+          
+          .translator_property .nuv_item {
+            display: flex;
+            width: 100%;
+            height: 50px;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            border-bottom: 1px solid #c7c7c7;
+            padding: 0 20px;
+          
+          }
+          
+          .translator_property .nuv_item li select {
+            outline: none;
+            border-style: none;
+            padding: 10px 0px;
+            font-size: 17px;
+            font-weight: 500;
+            color: #606060;
+            cursor: pointer;
+            transition: all .3s ease-out;
+          
+          }
+          
+          .translator_property .nuv_item li select:hover {
+            color: #111;
+          }
+          
+          .bx-transfer {
+            font-size: 22px;
+            color: #606060;
+            cursor: pointer;
+            transition: all .3s ease-out;
+          }
+          
+          .bx-transfer:hover {
+            color: #111;
+          }
+          
+          .write_box {
+            display: flex;
+          
+          }
+          
+          .property_from,
+          .property_trans {
+            width: 100%;
+            position: relative;
+          }
+          
+          .write_box textarea {
+            width: 100%;
+            height: 250px;
+            border-style: none;
+            outline: none;
+            resize: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            color: #606060;
+            position: relative;
+          }
+          
+          .write_box textarea:nth-child(1) {
+            border-right: 1px solid #c7c7c7;
+          }
+          
+          .write_box .icons {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+          
+          }
+          
+          .icons .bx {
+            width: 35px;
+            height: 35px;
+            background: #ddd;
+            text-align: center;
+            line-height: 35px;
+            font-size: 18px;
+            color: #000;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all .3s ease-out;
+          }
+          
+          .icons .bx:hover {
+            background: #606060;
+            color: white;
+          }
+          
+          .code_length {
+            font-size: 18px;
+            color: #606060;
+          }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="translator_property">
+            <ul class="nuv_item">
+                <li>
+                    <select id="fromLanguage"> <!-- Added an ID for easy identification -->
+                    </select>
+                </li>
+                <li class="bx bx-transfer"></li>
+                <li>
+                    <select id="toLanguage"> <!-- Added an ID for easy identification -->
+                    </select>
+                </li>
+            </ul>
+            <div class="write_box">
+                <div class="property_from">
+                    <textarea maxlength="5000" class="fromText" placeholder="Write down"></textarea>
+                    <div class="icons">
+                        <span class="bx bx-copy"></span>
+                        <div class="code_length">0/5000</div>
+                    </div>
+                </div>
+                <div class="property_trans">
+                    <textarea class="toTranslate" disabled></textarea>
+                    <div class="icons">
+                        <span class="bx bx-volume-full"></span>
+                        <span class="bx bx-copy"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let language = {
+            'en': 'English',
+            'hi': 'Hindi',
+            'kn': 'Kannada',
+            // Add more language codes and names as needed
+        };
+
+        let langOptions = document.querySelectorAll('select');
+        let fromText = document.querySelector('.fromText'); // Corrected the class name
+        let transText = document.querySelector('.toTranslate'); // Corrected the class name
+
+        langOptions.forEach((selectElement, con) => {
+            for (let countryCode in language) {
+                let selected = con === 0 && countryCode === 'en' ? 'selected' : con === 1 && countryCode === 'hi' ? 'selected' : '';
+                let option = document.createElement('option');
+                option.value = countryCode;
+                option.text = language[countryCode];
+                option.selected = selected;
+                selectElement.add(option);
+            }
+        });
+
+        fromText.addEventListener('input', function () {
+            let content = fromText.value;
+            let fromContent = langOptions[0].value;
+            let transContent = langOptions[1].value;
+            let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=${fromContent}|${transContent}`;
+
+            fetch(transLINK)
+                .then(translate => translate.json())
+                .then(data => {
+                    transText.value = data.responseData.translatedText;
+                })
+                .catch(error => {
+                    console.error('Translation error:', error);
+                });
+        });
+    </script>
+</body>
+
+</html>

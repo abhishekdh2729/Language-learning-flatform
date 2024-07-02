@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quix-hindi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: black;
+        }
+
+        .app {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 100px auto 0;
+            border-radius: 10px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+
+
+        }
+
+        .app h1 {
+            font-size: 25px;
+            color: black;
+            font-weight: 600;
+            border-bottom: 1px solid #333;
+            padding-bottom: 30px;
+        }
+
+        .quiz {
+            padding: 20px 0;
+        }
+
+        .quiz h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: black;
+        }
+
+        .btn {
+            background: white;
+            color: #222;
+            font-weight: 500;
+            width: 100%;
+            border: 1px solid #222;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: left;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover:not([disabled]) {
+            background: #222;
+            color: #fff;
+
+        }
+
+        .btn:disabled {
+            cursor: no-drop;
+        }
+
+        #next-btn {
+            background: #001e4d;
+            color: white;
+            font-weight: 500;
+            width: 150px;
+            border: 0;
+            padding: 10px;
+            margin: 20px auto 0;
+            border-radius: 4px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #next-btn:hover {
+            background: #000f28;
+        }
+
+        .correct {
+            background: #6ff6a8;
+        }
+
+        .incorrect {
+            background: #f86b6b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <h1>Simple quiz</h1>
+        <div class="quiz">
+            <h2 id="question"> question goes here</h2>
+            <div class="answer-buttons">
+                <!-- Answer buttons will be added dynamically using JavaScript -->
+                <div class="answer-buttons">
+                    <button class="btn">Answer 1</button>
+                    <button class="btn">Answer 2</button>
+                    <button class="btn">Answer 3</button>
+                    <button class="btn">Answer 4</button>
+                </div>
+            </div>
+            <button id="next-btn" onclick="showNextQuestion()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // ... (unchanged questions)
+            {
+                question: "Translate the English word house into Hindi.",
+                answers: [
+                    { text: "घर (ghar)", correct: true },
+                    { text: "स्कूल (school)", correct: false },
+                    { text: "बाग (bag)", correct: false },
+                    { text: " कमरा (kamra)", correct: false },
+                ]
+            },
+            {
+                question: "What is the Hindi word for book?",
+                answers: [
+                    { text: "किताब (kitab)", correct: true },
+                    { text: "पेन (pen)", correct: false },
+                    { text: "कलम (kalam)", correct: false },
+                    { text: "पेपर (paper)", correct: false },
+                ]
+            },
+            {
+                question: "What does नमस्ते (namaste) mean in English?",
+                answers: [
+                    { text: "Hello", correct: true },
+                    { text: " Goodbye", correct: false },
+                    { text: "Thank you", correct: false },
+                    { text: "Excuse me", correct: false },
+                ]
+            },
+            {
+                question: "What is the Hindi word for the color red?",
+                answers: [
+                    { text: " नीला (Neela)", correct: false },
+                    { text: "हरा (Hara)", correct: false },
+                    { text: " लाल (Laal)", correct: true },
+                    { text: "पीला (Peela)", correct: false },
+                ]
+            },
+            {
+                question: " What is a हाथी (Hathi) in English?",
+                answers: [
+                    { text: "Lion", correct: false },
+                    { text: "Elephant", correct: true },
+                    { text: " Dog", correct: false },
+                    { text: "Cat", correct: false },
+                ]
+            },
+            {
+                question: "What is a शेर (Sher) in English?",
+                answers: [
+                    { text: "Elephant", correct: false },
+                    { text: "Tiger", correct: true },
+                    { text: "Monkey", correct: false },
+                    { text: " Giraffe", correct: false },
+                ]
+            },
+            {
+                question: "Which word means small in Hindi?",
+                answers: [
+                    { text: "छोटा (Chhota)", correct: true },
+                    { text: "बड़ा (Bada)", correct: false },
+                    { text: "लम्बा (Lamba)", correct: false },
+                    { text: " मोटा (Mota)", correct: false },
+                ]
+            },
+            {
+                question: "What is a मच्छर (Machchar) in English?",
+                answers: [
+                    { text: "Butterfly", correct: false },
+                    { text: "Ant", correct: false },
+                    { text: " Mosquito", correct: true },
+                    { text: "Bee", correct: false },
+                ]
+            },
+            {
+                question: "Choose a synonym for आकाश (Sky).",
+                answers: [
+                    { text: "भूमि (Bhumi)", correct: false },
+                    { text: "समुद्र (Samudra)", correct: false },
+                    { text: "अंधकार (Andhkaar)", correct: false },
+                    { text: "आसमान (Aasman)", correct: true },
+                ]
+            },
+            {
+                question: "Translate मौसम (Maosam) to English.",
+                answers: [
+                    { text: "Mango", correct: false },
+                    { text: "Apple", correct: false },
+                    { text: "Banana", correct: false },
+                    { text: "Orange", correct: true },
+                ]
+            }
+        ];
+
+        const questionElement = document.getElementById("question");
+        const answerButtons = document.querySelector(".answer-buttons");
+        const nextButton = document.getElementById("next-btn");
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            nextButton.innerHTML = "Next";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            resetState();
+            let currentQuestion = questions[currentQuestionIndex];
+            let questionNo = currentQuestionIndex + 1;
+            questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
+
+            currentQuestion.answers.forEach(answer => {
+                const button = document.createElement("button");
+                button.innerHTML = answer.text;
+                button.classList.add("btn");
+                answerButtons.appendChild(button);
+                if (answer.correct) {
+                    button.dataset.correct = answer.correct;
+                }
+                button.addEventListener("click", selectAnswer);
+            });
+        }
+
+        function resetState() {
+            nextButton.style.display = "none";
+            while (answerButtons.firstChild) {
+                answerButtons.removeChild(answerButtons.firstChild);
+            }
+        }
+
+        function selectAnswer(e) {
+            const selectedBtn = e.target;
+            const isCorrect = selectedBtn.dataset.correct === "true";
+            if (isCorrect) {
+                selectedBtn.classList.add("correct");
+                score++;
+            } else {
+                selectedBtn.classList.add("incorrect");
+            }
+            Array.from(answerButtons.children).forEach(button => {
+                if (button.dataset.correct == "true") {
+                    button.classList.add("correct");
+                }
+                button.disabled = true;
+            });
+            showNextButton();
+        }
+
+        function showNextButton() {
+            nextButton.style.display = "block";
+        }
+
+        function showNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            questionElement.innerHTML = `You scored ${score} out of ${questions.length} questions.`;
+            answerButtons.innerHTML = "";
+            nextButton.style.display = "none";
+        }
+
+        startQuiz();
+    </script>
+</body>
+
+</html>

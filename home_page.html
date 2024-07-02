@@ -1,0 +1,145 @@
+
+
+<html>
+    <head>
+        <title>
+            Eduson - Learn to Max
+        </title>
+        <style>
+            *{
+    margin: 0;
+    padding: 0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.banner{
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),url(background.jpg); 
+    background-size: cover;
+    background-position: center;
+}
+.navigations{
+    width: 90%;
+    margin: auto;
+    padding: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.Eduson_Learn to Max{
+    width: 120px;
+    cursor: pointer;
+}
+.navigations ul li {
+    list-style: none;
+    display: inline-block;
+    margin: -2px 9px;
+    position: relative;
+    top: -71px;
+    font-size: 20px;
+}
+.navigations ul li a{
+    text-decoration: none;
+    color: antiquewhite;
+    text-transform: uppercase;
+}
+.navigations ul li::after{
+    content: '';
+    height: 3px;
+    width: 0;
+    background: rgb(0, 247, 255);
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    transition: 1.5;
+}
+.navigations ul li:hover::after{
+    width: 100%;
+}
+.contents{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    color: antiquewhite;
+
+}
+.contents h1{
+    font-size: 70px;
+    margin-top: 90px;
+}
+.contents p{
+    margin: 30px auto;
+    font-weight: 100;
+    line-height: 30px;
+}
+button{
+    width: 150px;
+    padding: 10px 0;
+    text-align: center;
+    margin: 20px 10px;
+    border-radius:25px;
+    font-weight: bolder;
+    position: relative;
+    border: 3px solid rgb(0, 247, 255);
+    background: transparent;
+    color: antiquewhite;
+    cursor: pointer;
+    overflow: hidden;
+}
+button a{
+    color: antiquewhite;
+    text-decoration: none;
+}
+span{
+    background: rgb(0, 247, 255);
+    width: 0;
+    height: 100%;
+    border-radius: 25px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+button:hover span{
+    width: 100%;
+    transition: 0.9s;
+}
+button:hover{
+    border: none;
+}
+details a{
+    color: rgb(195, 205, 50);
+    font-size: xx-large;
+
+}
+        </style>
+    </head>
+    <body>
+        <div class="banner">
+            <div class="navigations">
+                <img src="logo.png" class="Eduson_Learn to Max">
+                <ul>
+                    <li><a href="home_page.html">Home</a></li>
+                    <li><a href="quiz_home.html">Quiz</a></li>       
+                    <li><a href="translate.html">Translate</a></li>
+                    <li><a href="classes_home.html">Courses</a></li>
+                    <li><a href="contactus.php">Contact Us</a></li>
+                    
+                </ul>
+            </div>
+            <div class="contents">
+                <h1>Learn To Max</h1>
+                <p>“You can teach a student a lesson for a day; but if you can teach him to learn by creating curiosity, he will continue the learning process as long as he lives.”<br>
+                    -Clay P. Bedford</p>
+                    <details>
+                        <summary>Want to know about everything,BUT HOW!!!!</summary>
+                        <p><a href="subscribe.html">Subscribe</a>, to our updates</p>
+                    </details>
+                    
+            </div>
+        </div>
+    </body>
+</html>
